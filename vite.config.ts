@@ -5,9 +5,13 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { fileURLToPath } from 'url';
 
 // Internals
-import { peerDependencies, dependencies } from './package.json';
+import pkg from './package.json' assert { type: 'json' };
+
+const { peerDependencies, dependencies } = pkg;
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 const externalPackages = [
   // We need to build @square/web-sdk with the package to avoid problems with ES Modules in bundlers like Next.js
@@ -63,6 +67,7 @@ export default defineConfig({
   },
   test: {
     coverage: {
+      provider: 'v8',
       reporter: ['text', 'json', 'html'],
     },
     environment: 'jsdom',
