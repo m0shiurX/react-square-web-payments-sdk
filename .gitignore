@@ -1,4 +1,3 @@
-
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,node,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,node,react
 
@@ -133,7 +132,6 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Gatsby files
 .cache/
@@ -214,5 +212,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Remove or comment out this line if it exists
+# dist
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,macos,node,react
