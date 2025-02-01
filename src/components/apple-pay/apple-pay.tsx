@@ -1,5 +1,5 @@
 // Dependencies
-import * as React from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type * as Square from '@square/web-sdk';
 
 // Internals
@@ -7,6 +7,7 @@ import { useForm } from '~/contexts/form';
 import { useEventListener } from '~/hooks/use-event-listener';
 import { ApplePayContainer } from './apple-pay.styles';
 import type { ApplePayProps } from './apple-pay.types';
+import React from 'react';
 
 /**
  * Renders a Apple Pay button to use in the Square Web Payment SDK, pre-styled
@@ -28,9 +29,9 @@ import type { ApplePayProps } from './apple-pay.types';
  * ```
  */
 function ApplePay({ id = 'rswps-apple-pay', ...props }: ApplePayProps) {
-  const [applePay, setApplePay] = React.useState<Square.ApplePay | undefined>(() => undefined);
+  const [applePay, setApplePay] = useState<Square.ApplePay | undefined>(() => undefined);
   const { cardTokenizeResponseReceived, createPaymentRequest, payments } = useForm();
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
 
   /**
    * Handle the on click of the Apple Pay button click
@@ -67,7 +68,7 @@ function ApplePay({ id = 'rswps-apple-pay', ...props }: ApplePayProps) {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!createPaymentRequest) {
       throw new Error('`createPaymentRequest()` is required when using digital wallets');
     }

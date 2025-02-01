@@ -1,5 +1,6 @@
 // Dependencies
-import * as React from 'react';
+import React from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type * as Square from '@square/web-sdk';
 
 // Internals
@@ -17,10 +18,10 @@ function CashAppPay({
   width = 'static',
   ...props
 }: CashAppPayProps) {
-  const [cashApp, setCashApp] = React.useState<Square.CashAppPay>();
+  const [cashApp, setCashApp] = useState<Square.CashAppPay>();
   const { createPaymentRequest, payments } = useForm();
 
-  const paymentRequestOptions: Square.CashAppPaymentRequestOptions = React.useMemo(
+  const paymentRequestOptions: Square.CashAppPaymentRequestOptions = useMemo(
     () => ({
       redirectURL: redirectURL || window.location.href,
       referenceId,
@@ -28,7 +29,7 @@ function CashAppPay({
     [redirectURL, referenceId]
   );
 
-  const options: Square.CashAppPayButtonOptions = React.useMemo(() => {
+  const options: Square.CashAppPayButtonOptions = useMemo(() => {
     const baseOptions = {
       shape,
       size,
@@ -46,7 +47,7 @@ function CashAppPay({
     }, {});
   }, [shape, size, values, width]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!createPaymentRequest) {
       throw new Error('`createPaymentRequest()` is required when using digital wallets');
     }
@@ -91,7 +92,7 @@ function CashAppPay({
     for (const callback of Object.keys(callbacks)) {
       cashApp?.addEventListener(
         callback.toLowerCase() as 'ontokenization',
-        (callbacks as Record<string, (event: Square.SqEvent<Square.TokenizationEvent>) => void>)[callback]
+        (callbacks as Record<string, (event: Square.SqEvent<Square.CashAppPayEventData>) => void>)[callback]
       );
     }
   }

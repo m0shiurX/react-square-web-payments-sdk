@@ -1,6 +1,7 @@
 // Dependencies
 import * as React from 'react';
 import type * as Square from '@square/web-sdk';
+import type { JSX } from 'react';
 
 // Internals
 import { useForm } from '~/contexts/form';
@@ -165,7 +166,7 @@ function CreditCard({
   useEventListener({
     listener: handlePayment,
     type: 'click',
-    element: buttonRef,
+    element: buttonRef as React.RefObject<Element>,
     options: {
       passive: true,
     },

@@ -1,5 +1,5 @@
 // Dependencies
-import * as React from 'react';
+import { useState, useRef, useMemo, useEffect, JSX } from 'react';
 import type * as Square from '@square/web-sdk';
 
 // Internals
@@ -13,6 +13,7 @@ import type {
   GiftCardProps,
   GiftCardWithChildren,
 } from './gift-card.types';
+import React from 'react';
 
 /**
  * Renders a Gift Card Input to use in the Square Web Payment SDK, pre-styled to
@@ -48,12 +49,12 @@ function GiftCard({
   style,
   ...props
 }: GiftCardProps) {
-  const [giftCard, setGiftCard] = React.useState<Square.GiftCard | undefined>(() => undefined);
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
+  const [giftCard, setGiftCard] = useState<Square.GiftCard | undefined>(() => undefined);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { cardTokenizeResponseReceived, payments } = useForm();
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const options: Square.GiftCardOptions = React.useMemo(() => {
+  const options: Square.GiftCardOptions = useMemo(() => {
     const baseOptions = {
       includeInputLabels,
       style,
@@ -104,7 +105,7 @@ function GiftCard({
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
 
@@ -148,7 +149,7 @@ function GiftCard({
   useEventListener({
     listener: handlePayment,
     type: 'click',
-    element: buttonRef,
+    element: buttonRef.current,
     options: {
       passive: true,
     },

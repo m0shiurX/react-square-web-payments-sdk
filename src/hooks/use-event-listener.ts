@@ -1,10 +1,10 @@
-// Dependencies
-import * as React from 'react';
+import React from 'react';
 
+// Dependencies
 export const getRefElement = <T>(
   element?: React.RefObject<Element> | T
 ): Element | T | undefined | null | React.RefObject<Element> => {
-  if (element && 'current' in element) {
+  if (element && typeof element === 'object' && 'current' in element) {
     return element.current;
   }
 
@@ -21,7 +21,7 @@ type UseEventListenerProps = {
 };
 
 function useEventListener({ type, listener, element = isSsr ? undefined : window, options }: UseEventListenerProps) {
-  const savedListener = React.useRef<EventListener>();
+  const savedListener = React.useRef<EventListener | null>(null);
 
   React.useEffect(() => {
     savedListener.current = listener;

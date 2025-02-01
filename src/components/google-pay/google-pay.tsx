@@ -1,5 +1,5 @@
 // Dependencies
-import * as React from 'react';
+import { useState, useRef, useMemo, useEffect, JSX } from 'react';
 import type * as Square from '@square/web-sdk';
 
 // Internals
@@ -7,6 +7,7 @@ import { useForm } from '~/contexts/form';
 import { useEventListener } from '~/hooks/use-event-listener';
 import { ButtonLoader } from './google-pay.styles';
 import type { GooglePayProps } from './google-pay.types';
+import React from 'react';
 
 /**
  * Renders a Google Pay button to use in the Square Web Payment SDK, pre-styled
@@ -34,11 +35,11 @@ const GooglePay = ({
   id = 'rswps-google-pay-container',
   ...props
 }: GooglePayProps): JSX.Element | null => {
-  const [googlePay, setGooglePay] = React.useState<Square.GooglePay | undefined>(() => undefined);
+  const [googlePay, setGooglePay] = useState<Square.GooglePay | undefined>(() => undefined);
   const { cardTokenizeResponseReceived, createPaymentRequest, payments } = useForm();
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const options: Square.GooglePayButtonOptions = React.useMemo(() => {
+  const options: Square.GooglePayButtonOptions = useMemo(() => {
     const baseOptions = {
       buttonColor,
       buttonSizeMode,
@@ -90,7 +91,7 @@ const GooglePay = ({
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!createPaymentRequest) {
       throw new Error('`createPaymentRequest()` is required when using digital wallets');
     }
@@ -136,7 +137,7 @@ const GooglePay = ({
   useEventListener({
     listener: handlePayment,
     type: 'click',
-    element: containerRef,
+    element: containerRef.current,
     options: {
       passive: true,
     },

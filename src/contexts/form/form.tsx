@@ -1,5 +1,5 @@
 // Dependencies
-import * as React from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import { payments } from '@square/web-sdk';
 import type * as Square from '@square/web-sdk';
 
@@ -7,24 +7,25 @@ import type * as Square from '@square/web-sdk';
 import { ErrorScreen } from '~/components/error-screen';
 import { useDynamicCallback } from '~/hooks/use-dynamic-callback';
 import type { FormContextType, FormProviderProps } from './form.types';
+import React from 'react';
 
 /**
  * Internal helper that the `PaymentForm` uses to manage internal state and
  * expose access to the Web Payment SDK library.
  */
-const FormContext = React.createContext<FormContextType>({
+const FormContext = createContext<FormContextType>({
   cardTokenizeResponseReceived: null as unknown as () => Promise<void>,
   createPaymentRequest: null as unknown as Square.PaymentRequestOptions,
   payments: null as unknown as Square.Payments,
 });
 
 function FormProvider({ applicationId, locationId, children, overrides, ...props }: FormProviderProps) {
-  const [instance, setInstance] = React.useState<Square.Payments>();
-  const [createPaymentRequest] = React.useState<undefined | Square.PaymentRequestOptions>(() =>
+  const [instance, setInstance] = useState<Square.Payments>();
+  const [createPaymentRequest] = useState<undefined | Square.PaymentRequestOptions>(() =>
     props.createPaymentRequest?.()
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
 
@@ -84,7 +85,7 @@ function FormProvider({ applicationId, locationId, children, overrides, ...props
 }
 
 const useForm = (): FormContextType => {
-  const context = React.useContext(FormContext);
+  const context = useContext(FormContext);
 
   if (context === undefined) {
     throw new Error('useForm must be used within a FormProvider');
